@@ -1,0 +1,7 @@
+---
+# Install Docker Engine from Docker's official apt repository (upstream,
+# not the distro package) so versions match what services expect.
+
+docker_users: [] # list of OS users to add to the docker group
+
+docker_compose_plugin: true

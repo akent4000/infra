@@ -1,0 +1,13 @@
+---
+# Defaults for the base role. Override via group_vars/host_vars.
+base_packages:
+  - curl
+  - git
+  - htop
+  - jq
+  - unzip
+  - vim
+
+# Apt update cache is considered fresh for this long, so repeated runs
+# within the window don't re-hit the mirrors.
+base_apt_cache_valid_time: 3600

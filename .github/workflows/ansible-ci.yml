@@ -1,0 +1,61 @@
+name: Ansible CI
+
+on:
+  push:
+    paths:
+      - "ansible/**"
+      - ".github/workflows/ansible-ci.yml"
+      - ".ansible-lint"
+  pull_request:
+    paths:
+      - "ansible/**"
+      - ".github/workflows/ansible-ci.yml"
+      - ".ansible-lint"
+
+jobs:
+  syntax-check:
+    name: Syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Ansible
+        run: pip install ansible-core
+
+      - name: Install role dependencies
+        working-directory: ansible
+        run: ansible-galaxy install -r requirements.yml
+
+      - name: Syntax check all playbooks
+        working-directory: ansible
+        run: |
+          set -euo pipefail
+          for playbook in playbooks/*.yml; do
+            echo "== $playbook =="
+            ansible-playbook "$playbook" --syntax-check
+          done
+
+  lint:
+    name: ansible-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Ansible and ansible-lint
+        run: pip install ansible-core ansible-lint
+
+      - name: Install role dependencies
+        working-directory: ansible
+        run: ansible-galaxy install -r requirements.yml
+
+      - name: Run ansible-lint
+        working-directory: ansible
+        run: ansible-lint .

@@ -1,0 +1,17 @@
+---
+# bootstrap: clean Ubuntu -> fully managed infrastructure host.
+# Deliberately separate from deploy.yml: app deploys must never be able
+# to change SSH/UFW/Docker as a side effect (blast radius).
+- name: Bootstrap a clean Ubuntu host into a managed node
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - base
+    - users
+    - ssh
+    - ufw
+    - docker
+    - monitoring
+    - backup

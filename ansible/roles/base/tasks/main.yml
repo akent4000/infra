@@ -1,0 +1,18 @@
+---
+# base: bring a clean Ubuntu host to a common baseline
+# (packages). Everything here must be idempotent.
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ base_apt_cache_valid_time }}"
+
+- name: Upgrade installed packages
+  ansible.builtin.apt:
+    upgrade: safe
+    autoremove: true
+
+- name: Install base packages
+  ansible.builtin.apt:
+    name: "{{ base_packages }}"
+    state: present

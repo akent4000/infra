@@ -1,0 +1,9 @@
+# Managed by Ansible — role: ssh. Do not edit manually.
+Port {{ ssh_port }}
+PasswordAuthentication {{ 'yes' if ssh_password_authentication else 'no' }}
+PermitRootLogin {{ 'yes' if ssh_permit_root_login else 'no' }}
+ClientAliveInterval {{ ssh_client_alive_interval }}
+ClientAliveCountMax {{ ssh_client_alive_count_max }}
+{% if ssh_allow_users %}
+AllowUsers {{ ssh_allow_users | join(' ') }}
+{% endif %}

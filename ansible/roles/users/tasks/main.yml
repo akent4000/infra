@@ -1,0 +1,40 @@
+---
+# users: OS accounts + sudo. Keys are authorized_keys material only —
+# never private keys (those live with the operator / in Infisical).
+
+- name: Manage groups
+  ansible.builtin.group:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ users_accounts }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Manage users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    groups: "{{ item.groups | default([]) }}"
+    append: true
+    create_home: true
+  loop: "{{ users_accounts }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Ensure sudo group has passwordless sudo
+  community.general.sudoers:
+    name: "ansible-managed-{{ users_sudo_group }}"
+    group: "{{ users_sudo_group }}"
+    state: present
+    commands: ALL
+    nopassword: true
+
+- name: Manage authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+    state: "{{ item.0.state | default('present') }}"
+  loop: "{{ users_accounts | subelements('ssh_keys', skip_missing=true) }}"
+  loop_control:
+    label: "{{ item.0.name }}"

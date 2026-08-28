@@ -1,0 +1,12 @@
+# Managed by Ansible — role: monitoring. Do not edit manually.
+[Unit]
+Description=Node Exporter
+After=network-online.target
+
+[Service]
+User=node_exporter
+ExecStart=/usr/local/bin/node_exporter --web.listen-address={{ monitoring_node_exporter_listen_addr }}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

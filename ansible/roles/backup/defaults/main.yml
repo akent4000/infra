@@ -1,0 +1,28 @@
+---
+# Backup: restic to an external S3 bucket (per architecture.md).
+# Repo URL and credentials are NOT defined here — they come at runtime
+# from Infisical (or a manual vault), never from git. Until
+# backup_restic_repo is set, the role only stages scripts and does no
+
+backup_install_path: /opt/backup
+backup_scripts_owner: root
+backup_scripts_group: root
+backup_scripts_mode: "0750"
+
+# --- All below is supplied via secrets at runtime, not git ---
+# backup_restic_repo: "s3:https://s3.example.com/bucket/path"
+# backup_restic_aws_access_key_id: ...
+# backup_restic_aws_secret_access_key: ...
+# backup_restic_password: ...
+backup_restic_repo: ""
+backup_restic_password: ""
+backup_restic_aws_access_key_id: ""
+backup_restic_aws_secret_access_key: ""
+backup_paths:
+  - /etc
+  - /opt
+backup_cron_hour: "3"
+backup_cron_minute: "30"
+backup_keep_daily: 7
+backup_keep_weekly: 4
+backup_keep_monthly: 6

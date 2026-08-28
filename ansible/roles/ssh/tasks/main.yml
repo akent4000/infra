@@ -1,0 +1,23 @@
+---
+# ssh: hardened, idempotent sshd configuration via a drop-in config
+# (sshd_config.d), so we never rewrite the distro's main sshd_config.
+
+- name: Install OpenSSH server
+  ansible.builtin.apt:
+    name: openssh-server
+    state: present
+
+- name: Deploy sshd hardening drop-in
+  ansible.builtin.template:
+    src: 00-ansible-hardening.conf.j2
+    dest: /etc/ssh/sshd_config.d/00-ansible-hardening.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart sshd
+
+- name: Validate sshd configuration before applying
+  # Guard: a broken sshd_config must never be loaded — validate first,
+  # the handler only restarts if validation passed.
+  ansible.builtin.command: sshd -t
+  changed_when: false

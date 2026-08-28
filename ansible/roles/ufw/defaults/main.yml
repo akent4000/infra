@@ -1,0 +1,18 @@
+---
+# Firewall policy: default deny incoming, allow outgoing. Rules are a
+# list so hosts can extend it via host_vars without touching the role.
+
+ufw_default_incoming_policy: deny
+ufw_default_outgoing_policy: allow
+
+ufw_rules:
+  - rule: allow
+    port: "{{ ssh_port | default(22) }}"
+    proto: tcp
+    comment: SSH
+
+# Extra rules per host, appended to ufw_rules:
+#   host_vars/test-01.yml:
+#     ufw_extra_rules:
+#       - { rule: allow, port: 443, proto: tcp, comment: HTTPS }
+ufw_extra_rules: []

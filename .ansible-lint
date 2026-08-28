@@ -1,0 +1,7 @@
+---
+# ansible-lint config. Run from the ansible/ directory (or with -c here)
+# so roles_path from ansible.cfg resolves correctly.
+profile: production
+
+exclude_paths:
+  - .github/

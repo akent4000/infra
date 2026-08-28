@@ -1,0 +1,4 @@
+---
+# Non-sensitive defaults for the test VM group. The real IP and any
+# secrets go into untracked files (see host_vars/README below), never
+# into git.

@@ -1,0 +1,14 @@
+---
+# Users to create on every managed host.
+# Structure:
+#   users_accounts:
+#     - name: alice
+#       ssh_keys:          # list of public keys (strings) or local file paths
+#         - "ssh-ed25519 AAAA... alice@laptop"
+#       shell: /bin/bash   # optional
+#       groups: [sudo]     # optional extra groups
+#       state: present     # set to absent to remove
+users_accounts: []
+
+# Group granted passwordless sudo by the users role.
+users_sudo_group: sudo

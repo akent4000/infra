@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Managed by Ansible — role: backup. Do not edit manually.
+set -euo pipefail
+
+source "{{ backup_install_path }}/restic.env"
+
+# First run initializes the repo; afterwards this is a no-op.
+restic snapshots >/dev/null 2>&1 || restic init
+
+restic backup {{ backup_paths | join(' ') }}
+
+restic forget \
+  --keep-daily {{ backup_keep_daily }} \
+  --keep-weekly {{ backup_keep_weekly }} \
+  --keep-monthly {{ backup_keep_monthly }} \
+  --prune

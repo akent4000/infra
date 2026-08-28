@@ -1,0 +1,31 @@
+---
+# ufw: deny-by-default firewall. Rules are applied BEFORE switching the
+# default policy, so SSH (and anything else in ufw_rules) is never cut
+# off by enabling the firewall.
+
+- name: Install UFW
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Allow configured rules
+  community.general.ufw:
+    rule: "{{ item.rule | default('allow') }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto | default('tcp') }}"
+    comment: "{{ item.comment | default(omit) }}"
+  loop: "{{ ufw_rules + ufw_extra_rules }}"
+
+- name: Set default incoming policy
+  community.general.ufw:
+    direction: incoming
+    policy: "{{ ufw_default_incoming_policy }}"
+
+- name: Set default outgoing policy
+  community.general.ufw:
+    direction: outgoing
+    policy: "{{ ufw_default_outgoing_policy }}"
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled

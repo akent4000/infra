@@ -1,0 +1,19 @@
+---
+# sshd hardening defaults. These describe a *state* — rerunning the
+# playbook must converge to the same sshd_config.
+
+ssh_port: 22
+
+# Disable password login entirely; keys only.
+ssh_password_authentication: false
+ssh_permit_root_login: false
+
+# Users/groups allowed to log in; empty list = no restriction (AllowUsers
+# line not managed). On Warpgate-managed hosts access is further gated by
+# Warpgate itself.
+ssh_allow_users: []
+
+# Seconds between keepalives; keeps NAT/firewall sessions from dying
+# and enables stale connections to be cleaned up.
+ssh_client_alive_interval: 300
+ssh_client_alive_count_max: 2

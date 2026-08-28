@@ -1,0 +1,31 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Ansible
+*.retry
+.vault_pass
+
+# Terraform / OpenTofu
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Backups
+*.sql
+*.sql.gz
+*.dump
+*.tar
+*.tar.gz
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
